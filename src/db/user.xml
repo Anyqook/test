@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="User">
+
+	<!-- User DB (member log-in) -->
+	<select id="checkUserId" parameterType="String" resultType="int">
+		select count(*) from jk_user where id=#{id} 
+	</select>
+
+	<insert id="insertUser" parameterType="databean.UserDataBean">
+		insert into jk_user
+		values(#{id}, #{password}, #{name}, #{birthday}, #{tel}, #{email, jdbcType=VARCHAR}, #{gender}, 1,
+		#{height, jdbcType=INTEGER}, #{weight, jdbcType=INTEGER}, #{address}, #{addressDetail}, #{zipcode}) 
+	</insert>
+	<update id="deleteUser" parameterType="String">
+		UPDATE jk_user SET password='0', tel=0, email='0@a.com', name='0',userLevel=0, addressDetail='0' WHERE id=#{id}
+	</update>
+	<update id="modifyUser" parameterType="databean.UserDataBean">
+		UPDATE jk_user SET password=#{password}, tel=#{tel}, email=#{email}, zipcode=#{zipcode}, address=#{address}, addressDetail=#{addressDetail}, 
+		height=#{height, jdbcType=INTEGER}, weight=#{weight, jdbcType=INTEGER} WHERE id=#{id}
+	</update>
+	<select id="getUserLevel" parameterType="String" resultType="Integer">		
+		select userLevel from jk_user where id=#{id}
+	</select>
+	<select id="getMailCount" parameterType="String" resultType="int">
+		SELECT count(*) FROM jk_user WHERE email=#{email}
+	</select>
+	
+	<!-- Product DB -->
+	<select id="getProductColorSearchCount" parameterType="java.util.Map" resultType="int">
+		SELECT count(*) FROM jk_product WHERE ref IN (SELECT MAX(ref) FROM jk_product
+		WHERE productName LIKE '%'||#{searchWord}||'%' <include refid="colorSearch"></include> AND productLevel=1
+		GROUP BY ref) AND productCode=TO_CHAR(ref) AND productLevel=1
+	</select>
+	<select id="getProductColorSearchList" parameterType="java.util.Map" resultType="databean.ProductDataBean">
+		SELECT tmp.*, r FROM (SELECT tmp2.*, rownum r FROM (SELECT * FROM jk_product WHERE ref in 
+		(SELECT MAX(ref) FROM jk_product WHERE productName LIKE '%'||#{searchWord}||'%'
+		<include refid="colorSearch"></include> AND productLevel=1 GROUP BY ref) AND productCode=TO_CHAR(ref) AND productLevel=1) tmp2)
+		tmp WHERE r &gt;= TO_NUMBER(#{start}) AND r &lt;= TO_NUMBER(#{end})
+	</select>
+	<select id="getProductName" parameterType="String" resultType="String">
+		SELECT productName FROM jk_product WHERE productCode=#{productCode}
+	</select>
+	<select id="getProductDetail" parameterType="int" resultType="databean.ProductDataBean">
+		SELECT * FROM jk_product WHERE TO_CHAR(ref)!=productCode AND ref=#{ref} AND productLevel=1
+	</select>
+	<select id="getProductCodesByRef" parameterType="String" resultType="databean.ProductDataBean">
+		SELECT productCode FROM jk_product WHERE ref=#{ref} AND productCode!=TO_CHAR(ref)
+	</select>
+	<select id="getProductThumbnail" parameterType="String" resultType="String">
+		SELECT thumbnail FROM jk_product WHERE productCode=#{productCode}
+	</select>
+	<select id="getProductNoSearch" parameterType="java.util.Map" resultType="int">
+		SELECT count(*) FROM jk_product <include refid="cate"></include> productCode=TO_CHAR(ref) AND productLevel=1
+	</select>
+	<select id="getProductNoSearchList" parameterType="java.util.Map" resultType="databean.ProductDataBean">
+		SELECT tmp.*, r FROM (SELECT list.*, rownum r FROM (SELECT * FROM jk_product <include refid="cate"></include> productCode=TO_CHAR(ref) AND productLevel=1 ORDER BY productRegDate desc) list) tmp WHERE r &gt;=TO_NUMBER(#{start}) AND r &lt;=TO_NUMBER(#{end})
+	</select>
+	<select id="getProductQuantityCount" parameterType="String" resultType="int">
+		SELECT count(*) FROM jk_product WHERE productCode=#{productList}
+	</select>
+	<select id="getProductQuantity" parameterType="String" resultType="int">
+		SELECT productQuantity FROM jk_product WHERE productCode=#{productList}
+	</select>
+	<select id="getProductDetailsByProductCode" parameterType="String" resultType="databean.ProductDataBean">
+		SELECT * FROM jk_product WHERE productCode=#{productCode}
+	</select>
+	
+	<!-- Review -->
+	<select id="getMaxReview" resultType="int">
+			SELECT max(reviewNo) FROM jk_review
+	</select>
+	<select id="getReviewCount" parameterType="java.util.Map" resultType="int">
+		SELECT count(*) From jk_review <include refid="search"></include>
+	</select>
+	<select id="getReviewNoSearchCount" resultType="int">
+		SELECT count(*) From jk_review
+	</select>
+	<select id="getReviewList" parameterType="java.util.Map" resultType="databean.ReviewDataBean">
+		SELECT tmp.* , r FROM (SELECT temp.* , rownum r FROM
+			(SELECT * FROM jk_review <include refid="search"></include> ORDER BY reviewDate desc) temp ORDER BY reviewDate desc) tmp WHERE r &gt;= TO_NUMBER(#{start}) AND r &lt;= TO_NUMBER(#{end})
+	</select>
+	<insert id="insertReview" parameterType="databean.ReviewDataBean">
+			INSERT INTO jk_review (ordercode, reviewNo, title, reviewContent, reviewDate, id, productCode, rating, photo1, photo2) 
+			VALUES (#{orderCode}, reviewNoSEQ.NEXTVAL, #{title}, #{reviewContent}, sysdate, #{id}, #{productCode}, #{rating}, #{photo1, jdbcType=VARCHAR}, #{photo2, jdbcType=VARCHAR})
+	</insert>
+	<select id="selectReview" parameterType="int" resultType="databean.ReviewDataBean">
+			SELECT * FROM jk_review WHERE reviewNo=#{num}
+	</select>
+	<select id="getReviewLikes" parameterType="int" resultType="int">
+			SELECT count(*) FROM jk_reviewScore WHERE reviewNo=#{reviewNo}
+	</select>
+	<select id="getReviewLike" parameterType="java.util.Map" resultType="int">
+			SELECT count(*) FROM jk_reviewScore WHERE TO_CHAR(reviewNo)=#{reviewNo} AND id=#{id}
+	</select>
+	<insert id="insertReviewLike" parameterType="java.util.Map">
+			INSERT INTO jk_reviewScore (reviewNo, id) VALUES(TO_NUMBER(#{reviewNo}), #{id})
+	</insert>
+	<delete id="deleteReviewLike" parameterType="java.util.Map">
+			DELETE FROM jk_reviewScore WHERE reviewNo=#{reviewNo} AND id=#{id}
+	</delete>
+	<delete id="deleteReview" parameterType="int">
+			DELETE FROM jk_review WHERE reviewNo=#{num}
+	</delete>
+	<delete id="deleteRvComment" parameterType="int">
+		delete from jk_comment where reviewNo = #{num}
+	</delete>
+	<delete id="deleteReviewLikes" parameterType="int">
+		delete from jk_reviewScore where reviewNo = #{num}
+	</delete>
+	<update id="modifyReview" parameterType="databean.ReviewDataBean">
+			UPDATE jk_review SET title=#{title}, reviewContent=#{reviewContent}, rating=#{rating}, photo1=#{photo1, jdbcType=VARCHAR}, photo2=#{photo2, jdbcType=VARCHAR} WHERE reviewNo=#{reviewNo}
+	</update>
+	<insert id="insertComment" parameterType="databean.CommentDataBean">
+			INSERT INTO jk_comment(reviewNo, commentNo, id, commentContent, commentDate)
+			VALUES(#{reviewNo}, commentNoSEQ.NEXTVAL, #{id}, #{commentContent, jdbcType=VARCHAR}, SYSDATE)
+	</insert>
+	<select id="getComment" parameterType="int" resultType="databean.CommentDataBean">
+		select * from jk_comment where reviewNo=#{reviewNo} order by commentNo desc
+	</select>
+	<update id="updateComment" parameterType="databean.CommentDataBean">
+		UPDATE jk_comment set commentContent = #{commentContent} where commentNo = #{commentNo}
+	</update>
+	<delete id="deleteComment" parameterType="int">
+		delete from jk_comment where commentNo = #{commentNo}
+	</delete>
+	<select id="getProductLevel" parameterType="String" resultType="int">
+		SELECT productLevel FROM jk_product WHERE productCode=#{productCode}
+	</select>
+	<select id="getRvSearchList" parameterType="java.util.Map" resultType="databean.ReviewDataBean">
+		SELECT tmp.*, r FROM (SELECT list.*, rownum r FROM (SELECT * FROM jk_review <include refid="search"></include> ORDER BY reviewNo desc) list ORDER BY reviewNo desc) tmp WHERE r &gt;=TO_NUMBER(#{start}) AND r &lt;=TO_NUMBER(#{end})
+	</select>
+	
+	
+	<!-- Basket -->
+	<select id="getBasketList" parameterType="String" resultType="databean.BasketDataBean">
+		SELECT b.productCode, b.basketQuantity, p.productName, p.thumbnail, p.productPrice, p.productQuantity, p.discount
+		FROM jk_basket b, jk_product p 
+		WHERE b.id=#{id} 
+		AND p.productCode=b.productCode 
+	</select>
+	<select id="getBasketCount" parameterType="String" resultType="int">
+		SELECT count(*) FROM jk_basket WHERE id=#{id}
+	</select>
+	<delete id="deleteBasketItem" parameterType="databean.BasketDataBean">
+		DELETE FROM jk_basket WHERE id=#{id} AND productCode=#{productCode}
+	</delete>
+	<insert id="inputBasket" parameterType="databean.BasketDataBean">
+		INSERT INTO jk_basket VALUES (#{id}, #{productCode}, #{basketQuantity})
+	</insert>
+	<update id="updateBasketList" parameterType="java.util.Map">
+		UPDATE jk_basket 
+		SET productCode=#{newProductCode}, basketQuantity=#{basketQuantity} 
+		WHERE id=#{id} AND productCode=#{productCode} 
+	</update>
+	<select id="getDuplicateCheck" parameterType="databean.BasketDataBean" resultType="int">
+		SELECT count(*) FROM jk_basket WHERE id=#{id} AND productCode=#{productCode}
+	</select>
+	<update id="increaseBasketItemQuantity" parameterType="databean.BasketDataBean">
+		UPDATE jk_basket SET basketquantity=basketquantity+#{basketQuantity} WHERE id=#{id} AND productCode=#{productCode}
+	</update>
+	<delete id="deleteBasketListById" parameterType="String">
+		DELETE FROM jk_basket WHERE id=#{id}
+	</delete>
+	
+	
+	<!-- Order -->
+	<select id="getDistinctOrderCountById" parameterType="String" resultType="int">
+		SELECT count(DISTINCT orderCode) FROM jk_orderList WHERE id=#{id} 
+	</select>
+	<select id="getDistinctOrderListById" parameterType="java.util.Map" resultType="databean.OrderListDataBean">
+		SELECT orderCode, orderStatus, orderAddress1, orderAddress2, orderZipcode, orderDate
+		FROM 
+		(SELECT orderCode, orderStatus, orderAddress1, orderAddress2, orderZipcode, orderDate, rownum r 
+		FROM 
+		(SELECT DISTINCT orderCode, orderStatus, orderAddress1, orderAddress2, orderZipcode, orderDate 
+		FROM jk_orderList 
+		WHERE id=#{id} 
+		ORDER BY orderDate DESC)
+		)
+		WHERE r between #{start} and #{end}
+	</select>
+  	<select id="getOrderListByOrderCode" parameterType="int" resultType="databean.OrderListDataBean">
+  		SELECT o.productCode, p.productName, p.thumbnail, o.orderQuantity, o.orderPrice, o.orderStatus,
+  				o.orderAddress1, o.orderAddress2, o.orderZipcode, o.id
+  		FROM jk_orderList o, jk_product p 
+  		WHERE o.productCode=p.productCode AND o.orderCode=#{orderCode}
+  	</select>
+	<insert id="insertOrder" parameterType="databean.OrderListDataBean">
+		INSERT INTO jk_orderList VALUES (
+		#{orderCode},
+		#{productCode},
+		#{ref},
+		#{id}, 
+		#{orderZipcode},
+		#{orderAddress1},
+		#{orderAddress2},
+		sysdate,
+		0,
+		#{orderQuantity},
+		#{orderPrice}
+		)
+	</insert>
+	<select id="getMaxOrderCode" resultType="int">
+		SELECT NVL(MAX(orderCode), 0) FROM jk_orderList
+	</select>
+	<select id="getCountOfItemsOrdered" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM jk_orderList WHERE orderCode=#{orderCode}
+	</select>
+	<select id="checkReviewWritten" parameterType="int" resultType="databean.ReviewDataBean">
+		SELECT productCode FROM jk_review WHERE orderCode=#{orderCode}
+	</select>
+
+  	
+  	<!-- chatting -->
+  	<select id="getChatList" parameterType="String" resultType="databean.ChatDataBean">
+  		SELECT * FROM jk_chat WHERE id=#{userid} ORDER BY chatTime asc
+  	</select>
+  	<insert id="chatInput" parameterType="databean.ChatDataBean">
+  		INSERT INTO jk_chat VALUES(#{isUser},#{id}, #{chatContent}, sysdate)
+  	</insert>
+  	
+  	<!-- findId & Password -->
+  	<select id="getIdCount" parameterType="databean.UserDataBean" resultType="int">
+  		SELECT count(*) FROM jk_user WHERE name=#{name} AND email=#{email}
+  	</select>
+  	<select id="getId" parameterType="databean.UserDataBean" resultType="String">
+  		SELECT id FROM jk_user WHERE name=#{name} AND email=#{email}
+  	</select>
+  	<update id="setPassword" parameterType="databean.UserDataBean">
+  		UPDATE jk_user SET password=#{password} WHERE id=#{id}
+  	</update>
+  	
+  	<!-- Search -->
+	<sql id="search">
+        <choose>
+           <when test="searchType=='ttl'">
+              WHERE title LIKE '%'||#{searchWord}||'%'
+           </when>
+           <when test="searchType=='ctt'">
+              WHERE reviewContent LIKE '%'||#{searchWord}||'%'
+           </when>
+           <when test="searchType=='both'">
+              WHERE title LIKE '%'||#{searchWord}||'%' OR reviewContent LIKE '%'||#{searchWord}||'%'
+           </when>
+           <when test="searchType=='writer'">
+              WHERE id LIKE '%'||#{searchWord}||'%'
+           </when>
+           <otherwise>
+           </otherwise>
+        </choose>
+     </sql>
+	
+	<sql id="colorSearch">
+		AND
+		<if test="selectedColors.contains('WH')">
+			productCode LIKE 'WH'||'%' OR
+		</if>
+		<if test="selectedColors.contains('BK')">
+			productCode LIKE 'BK'||'%' OR
+		</if>
+		<if test="selectedColors.contains('RD')">
+			productCode LIKE 'RD'||'%' OR
+		</if>
+		<if test="selectedColors.contains('BL')">
+			productCode LIKE 'BL'||'%' OR
+		</if>
+		<if test="selectedColors.contains('GN')">
+			productCode LIKE 'GN'||'%' OR
+		</if>
+		<if test="selectedColors.contains('YL')">
+			productCode LIKE 'YL'||'%' OR
+		</if>
+		<if test="selectedColors.contains('BR')">
+			productCode LIKE 'BR'||'%' OR
+		</if>
+		<if test="selectedColors.contains('NV')">
+			productCode LIKE 'NV'||'%' OR
+		</if>
+		<if test="selectedColors.contains('GR')">
+			productCode LIKE 'GR'||'%' OR
+		</if>
+		<if test="selectedColors.contains('BG')">
+			productCode LIKE 'BG'||'%' OR
+		</if>
+		<if test="selectedColors.contains('SK')">
+			productCode LIKE 'SK'||'%' OR
+		</if>
+		<if test="selectedColors.contains('ETC')">
+			productCode LIKE 'PK'||'%' OR
+			productCode LIKE 'PP'||'%' OR
+			productCode LIKE 'OR'||'%' OR
+		</if>
+		<if test="selectedColors==null || selectedColors==''">
+			productCode LIKE '' || '%' OR
+		</if>
+		productCode LIKE '0000'||'%'
+	</sql>
+	<sql id="cate">
+		<choose>
+			<when test="category == 'JKnJP'">
+				WHERE productcategory = 1 AND
+			</when>
+			<when test="category == 'COAT'">
+				WHERE productcategory = 2 AND
+			</when>
+			<when test="category == 'CARDIGAN'">
+				WHERE productcategory = 3 AND
+			</when>
+			<when test="category == 'DRESS'">
+				WHERE productcategory = 4 AND
+			</when>
+			<when test="category == 'BLOUSE'">
+				WHERE productcategory = 5 AND
+			</when>
+			<when test="category == 'SHIRTS'">
+				WHERE productcategory = 6 AND
+			</when>
+			<when test="category == 'TSHIRTS'">
+				WHERE productcategory = 7 AND
+			</when>
+			<when test="category == 'KNIT'">
+				WHERE productcategory = 8 AND
+			</when>
+			<when test="category == 'SKIRT'">
+				WHERE productcategory = 9 AND
+			</when>
+			<when test="category == 'PANTS'">
+				WHERE productcategory = 10 AND
+			</when>
+			<when test="category == 'SHOES'">
+				WHERE productcategory = 11 AND
+			</when>
+			<when test="category == 'BAG'">
+				WHERE productcategory = 12 AND
+			</when>
+			<when test="category == 'ACCESSORY'">
+				WHERE productcategory = 13 AND
+			</when>
+			<when test="category == 'OUTER'">
+				WHERE productcategory &lt;= 3 AND
+			</when>
+			<when test="category == 'BLnSHIRTS'">
+				WHERE productcategory IN (5,6) AND
+			</when>
+			<when test="category == 'TnTOP'">
+				WHERE productcategory IN (7,8) AND
+			</when>
+			
+			<otherwise>
+				WHERE
+			</otherwise>
+		</choose>
+	</sql>
+	<select id="getProdCode" resultType="java.util.Map">
+		SELECT productCode FROM jk_product
+	</select>
+	<select id="getProdRef" resultType="java.util.Map">
+		SELECT DISTINCT ref FROM jk_product
+	</select>
+	<select id="getBestProduct"  resultType="int">
+		SELECT p.ref, SUM(orderQuantity) sum FROM jk_product p, jk_orderList o WHERE p.productCode=o.productCode AND p.productLevel=1 GROUP BY p.ref ORDER BY sum desc
+	</select>
+	<select id="getBestList" parameterType="int" resultType="databean.ProductDataBean">
+		SELECT DISTINCT(ref), productName, productPrice, thumbnail FROM jk_product WHERE ref =#{ref} AND productLevel=1
+	</select>
+	
+	<!-- Main: Product Recommendations -->
+	<select id="getClusterCount" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM jk_clusterId WHERE id=#{id} 
+	</select>
+	<select id="getRecCategories" parameterType="String" resultType="databean.RecDataBean">
+		SELECT c.clusterid, r.categoryDetail, r.prediction 
+		FROM jk_clusterId c, jk_recommendations r 
+		WHERE c.clusterId=r.clusterId AND id=#{id} 
+		ORDER BY prediction DESC
+	</select>
+	<select id="getBestProductByCategoryDetail" parameterType="int" resultType="databean.ProductDataBean">	
+		SELECT DISTINCT(ref), thumbnail, productName, productPrice, discount 
+		FROM jk_product 
+		WHERE ref=
+		(SELECT ref 
+		FROM 
+		(SELECT p.ref, SUM(orderQuantity) sum 
+		FROM jk_product p, jk_orderList o 
+		WHERE p.productCode=o.productCode AND categoryDetail=#{categoryDetail} AND productLevel=1
+		GROUP BY p.ref 
+		ORDER BY sum DESC) 
+		WHERE ROWNUM=1)
+	</select>
+	<select id="getOneProductByCategoryDetail" parameterType="int" resultType="databean.ProductDataBean">
+		SELECT DISTINCT(ref), thumbnail, productName, productPrice, discount 
+		FROM jk_product 
+		WHERE categoryDetail=#{categoryDetail} AND productLevel=1 AND ROWNUM=1
+	</select>
+</mapper>

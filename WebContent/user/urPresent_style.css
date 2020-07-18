@@ -1,0 +1,708 @@
+@charset "UTF-8";
+
+/* ====UrPresent Common Theme==== */
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+* {
+	font-family: 'Nanum Gothic';
+}
+
+a, a:link, a:visited, a:hover, a:active{
+	text-decoration: none !important;
+}
+
+/* ====userTopNavbar==== */
+.topNavIcon {
+	width: 1.875rem;
+	height: 1.875rem;
+}
+
+/* ====userSideNavbar==== */
+.sidebar {
+	position: fixed;
+	bottom: 0vh;
+	right: 0vw;
+ 	display: flex;
+	align-items: center;
+	z-index: 1;
+}
+
+.sidebarItem {
+	width: 5vw;
+	min-width: 4rem;
+}
+
+.sidebarIcon {
+	width: 2vw;
+	min-width: 1.5rem;
+	height: 2vw;
+	min-height: 1.5rem;
+}
+
+.iconText {
+	font-size: calc(8px + 0.2vw);
+	display: inline-block;
+}
+
+.chatText {
+	font-size: calc(7px + 0.1vw);
+	display: inline-block;
+}
+
+.anchorPanel {
+	height: 22.5px;
+}
+
+.anchorText {
+	font-size: 9px;
+}
+
+/* ====userFooter==== */
+.footer {
+	position: relative;
+	bottom: 0vh;
+	margin: auto;
+	width: 100vw;
+}
+
+/* ====ProductList==== */
+.bestProductJumbotron {
+	height: 70px;
+}
+
+.productCategoryJumbotron {
+	height: 150px;
+}
+
+/* ====Carousel==== */
+.carousel-inner .carousel-item.active,
+.carousel-inner .carousel-item-next,
+.carousel-inner .carousel-item-prev {
+	display: flex;
+}
+
+.carousel-inner .carousel-item-right.active,
+.carousel-inner .carousel-item-next {
+	transform: translateX(33.3%);
+}
+
+.carousel-inner .carousel-item-left.active, 
+.carousel-inner .carousel-item-prev {
+	transform: translateX(-33.3%);
+}
+  
+.carousel-inner .carousel-item-right,
+.carousel-inner .carousel-item-left{ 
+	transform: translateX(0);
+}
+
+.carousel-control-prev, .carousel-control-next {
+	filter: invert(100%);
+	z-index: 1;
+	display: inline-block;
+}
+
+/* ====userLoginForm==== */
+.joinUs {
+	width: 7rem;
+}
+
+/* ====userMyPage==== */
+
+
+/* ====userInputForm==== */
+#emailVerificationMsg {
+	color: brown;
+}
+
+/* ====userMain==== */
+.cardItem {
+	cursor: pointer;
+	font-size: calc(12px + 0.2vw);
+}
+
+.rewindAndFastForward {
+	width: 20px;
+}
+
+.returnAndForward {
+	width: 9px;
+}
+
+.wrappableContent {
+	word-break: break-all;
+}
+
+.hangingIndent {
+	word-break: keep-all;
+	text-indent: 0;
+}
+
+.rightMarginAdded {
+	margin-right: 2vw;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 364px) {
+	.brandLogo {
+		width: 90vw;
+		margin-left: 4vw;
+	}
+	
+	.cardItem {
+		width: 34vw;
+	}
+	
+	.loginContainer {
+		width: 90vw;
+	}
+	
+	.myPageLabel {
+		margin-left: 10vw;
+		margin-top: 0.5vh;
+		margin-bottom: 0.5vh;
+		width: 28vw;
+	}
+	
+	.myPageInfo {
+		margin-left: 2vw;
+		margin-top: 0.5vh;
+		margin-bottom: 0.5vh;
+		width: 45vw;
+	}
+	
+	.mailCheckContainer {
+		width: 50vw;
+	}
+	
+	.csInfoCol {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+	
+	.companyInfoRow {
+		display: flex;
+		flex-direction: column;
+	}
+	
+	.companyInfoCol {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		word-break: keep-all;
+		width: 64vw;
+	}
+	
+	.spaceAdded {
+		padding-right: 2vw;
+	}
+	
+	.inputformLabel {
+		width: 100%;
+	}
+	
+	.heightLabel {
+		width: 100%;
+	}
+	
+	.inputfield {
+		width: 100%;
+	}
+
+	.heightGroup {
+		width: 100%;
+	}
+	
+	.heightWeight {
+		width: 180px;
+	}
+	
+	.units {
+		width: 90px;
+	}
+	
+	.productLabel {
+		margin-left: 26%;
+	}
+	
+	input::-webkit-input-placeholder {
+    	font-size: 14px;
+	}
+}
+
+@media only screen and (min-width: 365px) and (max-width: 428px) {
+	.brandLogo {
+		width: 90vw;
+		margin-left: 4vw;
+	}
+	
+	.cardItem {
+		width: 35vw;
+	}
+		
+	.loginContainer {
+		width: 90vw;
+	}
+	
+	.myPageLabel {
+		margin-left: 10vw;
+		margin-top: 0.5vh;
+		margin-bottom: 0.5vh;
+		width: 28vw;
+	}
+	
+	.myPageInfo {
+		margin-left: 2vw;
+		margin-top: 0.5vh;
+		margin-bottom: 0.5vh;
+		width: 45vw;
+	}
+		
+	.csInfoCol {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+	
+	.companyInfoRow {
+		display: flex;
+		flex-direction: column;
+	}
+	
+	.companyInfoCol {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		word-break: keep-all;
+		width: 70vw;
+	}
+	
+	.spaceAdded {
+		padding-right: 2vw;
+	}
+
+	
+	.inputformLabel {
+		width: 100%;
+	}
+	
+	.heightLabel {
+		width: 100%;
+	}
+	
+	.inputfield {
+		width: 100%;
+	}
+	
+	.heightGroup {
+		width: 100%;
+	}
+	
+	.heightWeight {
+		width: 180px;
+	}
+	
+	.units {
+		width: 90px;
+	}
+		
+	.productLabel {
+		margin-left: 30%;
+	}
+}
+
+@media only screen and (min-width: 429px) and (max-width: 520px) {
+	.brandLogo {
+		width: 90vw;
+		max-width: 28.8rem;
+		margin-left: 4vw;
+	}
+	
+	.cardItem {
+		width: 36vw;
+	}
+		
+	.loginContainer {
+		width: 90vw;
+	}
+	
+	.myPageLabel {
+		margin-left: 13vw;
+		margin-top: 0.5vh;
+		margin-bottom: 0.5vh;
+		width: 28vw;
+	}
+	
+	.myPageInfo {
+		margin-left: 2vw;
+		margin-top: 0.5vh;
+		margin-bottom: 0.5vh;
+		width: 45vw;
+	}
+		
+	.csInfoCol {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+	
+	.companyInfoRow {
+		display: flex;
+		flex-direction: column;
+	}
+	
+	.companyInfoCol {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		word-break: keep-all;
+		width: 70vw;
+	}
+	
+	.spaceAdded {
+		padding-right: 2vw;
+	}
+
+	.inputformLabel {
+		width: 100%;
+	}
+	
+	.heightLabel {
+		width: 100%;
+	}
+	
+	.inputfield {
+		width: 100%;
+	}
+
+	.heightGroup {
+		width: 100%;
+	}
+	
+	.heightWeight {
+		width: 180px;
+	}
+	
+	.units {
+		width: 90px;
+	}
+		
+	.productLabel {
+		margin-left: 33%;
+	}
+}
+
+@media only screen and (min-width: 521px) and (max-width: 636px) {
+	.brandLogo {
+		width: 28.8rem;
+		margin-left: 4vw;
+	}
+	
+	.cardItem {
+		width: 37vw;
+	}
+	
+	.loginContainer {
+		width: 468px;
+	}
+	
+	.myPageLabel {
+		margin-left: 10vw;
+		margin-top: 0.5vh;
+		margin-bottom: 0.5vh;
+		width: 28vw;
+	}
+	
+	.myPageInfo {
+		margin-left: 1vw;
+		margin-top: 0.5vh;
+		margin-bottom: 0.5vh;
+		width: 45vw;
+	}
+	
+	.csInfoCol {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+	
+	.companyInfoRow {
+		display: flex;
+		flex-direction: column;
+	}
+	
+	.companyInfoCol {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		word-break: keep-all;
+		width: 70vw;
+	}
+	
+	.spaceAdded {
+		padding-right: 2vw;
+	}
+
+	.inputformLabel {
+		width: 100%;
+	}
+	
+	.heightLabel {
+		width: 100%;
+	}
+	
+	.inputfield {
+		width: 100%;
+	}
+	
+	.heightWeightForm {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+	.heightGroup {
+		width: 50%;
+	}
+	
+	.heightWeight {
+		width: 180px;
+	}
+	
+	.units {
+		width: 60px;
+	}
+		
+	.productLabel {
+		margin-left: 36%;
+	}
+}
+
+@media only screen and (min-width: 637px) and (max-width: 1024px) {
+	.brandLogo {
+		width: 28.8rem;
+		margin-left: 4vw;
+	}	
+	
+	.cardItem {
+		width: 25vw;
+	}
+	
+	.loginContainer {
+		width: 468px;
+	}
+	
+	.myPageLabel {
+		margin-left: 15vw;
+		margin-top: 0.5vh;
+		margin-bottom: 0.5vh;
+		width: 15vw;
+	}
+	
+	.myPageInfo {
+		margin-left: 1vw;
+		margin-top: 0.5vh;
+		margin-bottom: 0.5vh;
+		width: 38vw;
+	}
+	
+	.csInfoCol {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		overflow-wrap: none;
+	}
+	
+	.companyInfoRow {
+		display: flex;
+		flex-direction: row;
+	}
+	
+	.companyInfoCol {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		overflow-wrap: none;
+		width: 30vw;
+	}
+	
+	.spaceAdded {
+		padding-right: 1vw;
+	}
+	
+	.inputformLabel {
+		width: 20%;
+		padding-top: 5px;
+	}
+	
+	.heightLabel {
+		width: 20%;
+		padding-top: 5px;
+	}
+	
+	.inputformGroup {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+	
+	.inputfield {
+		width: 60%;
+	}
+	
+	.inputformBtn {
+		width: 20%;
+		text-align: center;
+	}
+	
+	.heightWeightForm {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+	.heightGroup {
+		width: 40%;
+	}
+	
+	.heightWeight {
+		width: 180px;
+	}
+	
+	.units {
+		width: 60px;
+	}
+	
+	.productLabel {
+		margin-left: 38%;
+	}
+}
+
+@media only screen and (min-width: 1025px) {
+	.brandLogo {
+		width: 28.8rem;
+	}	
+	
+	.cardItem {
+		width: 19vw;
+	}
+	
+	.carousel-item {
+		width: 19vw;
+	}	
+	
+	.loginContainer {
+		width: 468px;
+	}
+	
+	.myPageLabel {
+		margin-left: 20vw;
+		margin-top: 0.5vh;
+		margin-bottom: 0.5vh;
+		width: 13vw;
+	}
+	
+	.myPageInfo {
+		margin-top: 0.5vh;
+		margin-bottom: 0.5vh;
+		width: 30vw;
+	}
+	
+	.csInfoCol {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		overflow-wrap: none;
+	}
+	
+	.companyInfoRow {
+		display: flex;
+		flex-direction: row;
+	}
+	
+	.companyInfoCol {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		overflow-wrap: none;
+		width: 30vw;
+	}
+	
+	.spaceAdded {
+		padding-right: 1vw;
+	}
+
+	.inputformLabel {
+		width: 20%;
+		padding-top: 5px;
+	}
+	
+	.heightLabel {
+		width: 20%;
+		padding-top: 5px;
+	}
+	
+	.inputformGroup {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+	
+	.inputfield {
+		width: 60%;
+	}
+	
+	.inputformBtn {
+		width: 20%;
+		text-align: center;
+	}
+	
+	.heightWeightForm {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+	.heightGroup {
+		width: 40%;
+	}
+	
+	.heightWeight {
+		width: 180px;
+	}
+	
+	.units {
+		width: 60px;
+	}
+	
+	.productDetail {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+	
+	.productDetailImg {
+		width: 50%;
+	}
+	
+	.productDetailDesc {
+		width: 50%;
+	}
+	
+	.productName {
+		width: 100%;
+	}
+	
+	.productLabel {
+		width: 60px;
+		margin-left: 33%;
+	}
+	
+	.productDesc {
+		width: 100px; 
+	}
+	
+	.productPriceUnit {
+		width: 60px;
+	}
+	
+}
